@@ -36,4 +36,13 @@ router.post("/", async (req, res) => {
     }
 })
 
+router.delete('/:id', async (req, res) => {
+    try {
+        await Perfil.findByIdAndDelete(req.params.id)
+        res.json({ mensagem: "Perfil removido com sucesso" })
+    } catch (erro) {
+        res.status(500).json({ mensagem: "Erro ao remover perfil", erro })
+    }
+})
+    
 export default router

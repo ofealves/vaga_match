@@ -7,8 +7,8 @@ dns.setServers(["8.8.8.8", "1.1.1.1"])
 import express from "express"
 import cors from "cors"
 import { conectarBanco } from "./config/database"
-import perfilRoutes from "./routes/perfil"
-import analiseRoutes from "./routes/analise"
+import perfilRoutes from "./routes/Perfil"
+import analiseRoutes from "./routes/Analise"
 
 const app = express()
 
