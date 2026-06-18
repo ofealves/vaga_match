@@ -2,12 +2,11 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Search, BarChart3, History, User } from "lucide-react"
+import { Search, History, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const itensMenu = [
     { href: "/", label: "Analisar vaga", icone: Search },
-    { href: "/resultado", label: "Resultado", icone: BarChart3 },
     { href: "/historico", label: "Histórico", icone: History },
     { href: "/perfil", label: "Meu perfil", icone: User },
 ]
