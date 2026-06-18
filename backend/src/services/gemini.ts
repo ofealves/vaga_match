@@ -10,6 +10,8 @@ export interface ResultadoAnalise {
     cargo: string
 }
 
+const aguardar = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 export const analisarVaga = async (
     perfil: IPerfil,
     textoVaga: string
@@ -47,20 +49,35 @@ Responda APENAS com um JSON válido, sem markdown, sem texto antes ou depois, no
 }
 `
 
-    const response = await ai.models.generateContent({
-        model: "gemini-flash-latest",
-        contents: prompt,
-    })
+    const maxTentativas = 3
+    let ultimoErro: unknown = null
 
-    const textoResposta = response.text ?? ""
+    for (let tentativa = 1; tentativa <= maxTentativas; tentativa++) {
+        try {
+            const response = await ai.models.generateContent({
+                model: "gemini-2.5-flash",
+                contents: prompt,
+            })
 
-    const jsonLimpo = textoResposta.replace(/```json|```/g, "").trim()
+            const textoResposta = response.text ?? ""
+            const jsonLimpo = textoResposta.replace(/```json|```/g, "").trim()
 
-    try {
-        const resultado: ResultadoAnalise = JSON.parse(jsonLimpo)
-        return resultado
-    } catch (erro) {
-        console.error("Erro ao parsear resposta da IA:", textoResposta)
-        throw new Error("A IA retornou um formato inválido")
+            const resultado: ResultadoAnalise = JSON.parse(jsonLimpo)
+            return resultado
+        } catch (erro) {
+            ultimoErro = erro
+            const ehErroDeSobrecarga = String(erro).includes("503") || String(erro).includes("UNAVAILABLE")
+
+            if (ehErroDeSobrecarga && tentativa < maxTentativas) {
+                console.warn(`Gemini sobrecarregado, tentativa ${tentativa}/${maxTentativas}. Aguardando antes de tentar de novo...`)
+                await aguardar(tentativa * 2000) // espera 2s, depois 4s, depois 6s
+                continue
+            }
+
+            console.error("Erro ao chamar/parsear resposta da IA:", erro)
+            throw new Error("Não foi possível completar a análise. Tente novamente em alguns instantes.")
+        }
     }
+
+    throw new Error("Não foi possível completar a análise. Tente novamente em alguns instantes.")
 }

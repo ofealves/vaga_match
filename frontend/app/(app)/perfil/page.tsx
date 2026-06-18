@@ -122,15 +122,13 @@ const Page = () => {
     }
 
     return (
-        <main className="min-h-screen bg-background flex flex-col items-center px-4 py-16">
-            <h1 className="text-3xl font-semibold text-foreground mb-2">
-                Seu <span className="text-primary">Perfil</span>
-            </h1>
-            <p className="text-muted-foreground mb-8 text-center max-w-md">
+        <div className="max-w-2xl">
+            <h1 className="text-xl font-semibold text-foreground mb-1">Meu perfil</h1>
+            <p className="text-muted-foreground text-sm mb-6">
                 Cadastre seus dados uma vez. Vamos usá-los para comparar com cada vaga.
             </p>
 
-            <Card className="w-full max-w-2xl">
+            <Card className="w-full">
                 <CardHeader>
                     <CardTitle>Informações pessoais</CardTitle>
                     <CardDescription>Dados básicos sobre você</CardDescription>
@@ -283,7 +281,7 @@ const Page = () => {
             >
                 {salvando ? "Salvando..." : "Salvar perfil"}
             </Button>
-        </main>
+        </div>
     )
 }
 
