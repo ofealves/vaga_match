@@ -9,6 +9,7 @@ import cors from "cors"
 import { conectarBanco } from "./config/database"
 import perfilRoutes from "./routes/Perfil"
 import analiseRoutes from "./routes/Analise"
+import authRoutes from "./routes/Auth"
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/perfil", perfilRoutes)
 app.use("/api/analise", analiseRoutes)
+app.use("/api/auth", authRoutes)
 
 const PORT = process.env.PORT || 5000
 
